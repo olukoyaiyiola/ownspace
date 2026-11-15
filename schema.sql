@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('owner','admin','editor','partner','viewer')), created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS sessions (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, expires_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS posts (id TEXT PRIMARY KEY, title TEXT NOT NULL, slug TEXT NOT NULL UNIQUE, excerpt TEXT DEFAULT '', body TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'draft', author_id TEXT, created_at TEXT DEFAULT CURRENT_TIMESTAMP, updated_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS listings (id TEXT PRIMARY KEY, title TEXT NOT NULL, category TEXT NOT NULL, description TEXT DEFAULT '', price_note TEXT DEFAULT '', image_url TEXT DEFAULT '', destination_url TEXT DEFAULT '', merchant TEXT DEFAULT '', commission_note TEXT DEFAULT '', status TEXT DEFAULT 'draft', created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS leads (id TEXT PRIMARY KEY, kind TEXT NOT NULL, name TEXT NOT NULL, contact TEXT NOT NULL, budget TEXT DEFAULT '', details TEXT DEFAULT '', status TEXT DEFAULT 'new', assigned_to TEXT DEFAULT '', created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS partners (id TEXT PRIMARY KEY, name TEXT NOT NULL, category TEXT DEFAULT '', contact TEXT DEFAULT '', commission_terms TEXT DEFAULT '', status TEXT DEFAULT 'prospect', created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS revenue (id TEXT PRIMARY KEY, source TEXT NOT NULL, description TEXT DEFAULT '', amount REAL NOT NULL DEFAULT 0, status TEXT DEFAULT 'pending', created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status);
+CREATE INDEX IF NOT EXISTS idx_listings_status ON listings(status);
+CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
